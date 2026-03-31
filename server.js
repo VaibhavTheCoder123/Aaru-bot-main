@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const API_KEY = "PASTE_YOUR_API_KEY_HERE"; // 🔒 keep private
+const API_KEY = "AIzaSyArL5kZlV5Mt0e78i24gZRnmSmgNkGZD6Q"; // 🔒 keep private
 
 app.post("/chat", async (req, res) => {
   const messages = req.body.messages;
@@ -32,14 +32,16 @@ app.post("/chat", async (req, res) => {
     if (data.error) {
       return res.json({ reply: "API error 😢" });
     }
+    console.log("API RESPONSE:", data);
 
     const reply = data.candidates[0].content.parts[0].text;
 
     res.json({ reply });
 
   } catch (err) {
-    res.json({ reply: "Server error 😢" });
-  }
+  console.error("FULL ERROR:", err);
+  res.json({ reply: "Server error 😢" });
+}
 });
 
 app.listen(3000, () => {
