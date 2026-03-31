@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const API_KEY = "AIzaSyArL5kZlV5Mt0e78i24gZRnmSmgNkGZD6Q";
+const API_KEY = "PASTE_YOUR_NEW_API_KEY_HERE";
 
 // Test route
 app.get("/", (req, res) => {
@@ -21,17 +21,18 @@ app.post("/chat", async (req, res) => {
   try {
     console.log("Received:", messages);
 
-    // 🔥 Convert chat history into single prompt
-    const prompt = messages
-      .map(m => `${m.role === "user" ? "User" : "Bot"}: ${m.text}`)
-      .join("\n");
-
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/text-bison-001:generateText?key=${API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
       {
-        prompt: {
-          text: "You are Aaru Bot, friendly and helpful.\n" + prompt
-        }
+        contents: [
+          {
+            parts: [
+              {
+                text: messages.map(m => m.text).join("\n")
+              }
+            ]
+          }
+        ]
       }
     );
 
@@ -43,17 +44,19 @@ app.post("/chat", async (req, res) => {
       return res.json({ reply: "No response 😅" });
     }
 
-    const reply = data.candidates[0].output;
+    const reply = data.candidates[0].content.parts[0].text;
 
     res.json({ reply });
 
   } catch (err) {
     console.error("FULL ERROR:", err.response?.data || err.message);
-    res.json({ reply: "Server error 😢" });
+
+    res.json({
+      reply: "Server error 😢 (check backend console)"
+    });
   }
 });
 
-// Start server
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
 });
