@@ -11,6 +11,7 @@ const API_KEY = "AIzaSyArL5kZlV5Mt0e78i24gZRnmSmgNkGZD6Q"; // 🔒 keep private
 
 app.post("/chat", async (req, res) => {
   const messages = req.body.messages;
+  
 
   try {
     const response = await fetch(
