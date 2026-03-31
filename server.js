@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const API_KEY = "PASTE_YOUR_NEW_API_KEY_HERE";
+const API_KEY = "AIzaSyArL5kZlV5Mt0e78i24gZRnmSmgNkGZD6Q";
 
 // Test route
 app.get("/", (req, res) => {
