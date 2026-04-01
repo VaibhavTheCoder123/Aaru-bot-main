@@ -42,12 +42,19 @@ body {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  transition: all 0.3s;
 }
 
 .sidebar h2 {
-  color: #fff;
-  margin-bottom: 20px;
+  color: #ede9fe;
+  font-weight: bold;
   text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.sidebar h2 span {
+  color: #c8a2ff; /* lavender highlight for Aaru */
 }
 
 .new-chat {
@@ -59,11 +66,12 @@ body {
   font-weight: bold;
   cursor: pointer;
   margin-bottom: 15px;
-  transition: 0.2s;
+  transition: all 0.2s;
 }
 
 .new-chat:hover {
-  transform: scale(1.03);
+  transform: scale(1.05);
+  opacity: 0.9;
 }
 
 #chatList {
@@ -96,9 +104,9 @@ body {
 .header {
   padding: 16px;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   background: linear-gradient(135deg, #b57edc, #9333ea);
-  color: white;
+  color: #fff;
   text-align: center;
 }
 
@@ -119,6 +127,16 @@ body {
   display: flex;
   flex-direction: column;
   max-width: 70%;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.4s forwards;
+}
+
+@keyframes fadeSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .user {
@@ -137,19 +155,27 @@ body {
   font-size: 0.95rem;
   word-wrap: break-word;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  transition: transform 0.2s;
+  transition: transform 0.2s, background 0.3s;
 }
 
 .user .bubble {
-  background: linear-gradient(135deg, #b57edc, #9333ea);
+  background: linear-gradient(135deg, #c084fc, #9333ea);
   color: white;
   border-bottom-right-radius: 5px;
+}
+
+.user .bubble:hover {
+  transform: scale(1.03);
 }
 
 .bot .bubble {
   background: #fff;
   color: #333;
   border-bottom-left-radius: 5px;
+}
+
+.bot .bubble:hover {
+  transform: scale(1.02);
 }
 
 /* Input area */
@@ -159,6 +185,7 @@ body {
   background: #fff;
   border-top: 1px solid #ddd;
   gap: 10px;
+  transition: all 0.2s;
 }
 
 input {
@@ -180,7 +207,7 @@ button.send {
   padding: 12px 18px;
   border-radius: 25px;
   border: none;
-  background: linear-gradient(135deg, #b57edc, #9333ea);
+  background: linear-gradient(135deg, #c084fc, #9333ea);
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -218,9 +245,6 @@ button.send:hover {
   #chatList {
     display: none;
   }
-  .main {
-    flex: 1;
-  }
 }
 </style>
 </head>
@@ -229,7 +253,7 @@ button.send:hover {
 <div class="container">
   <!-- Sidebar -->
   <div class="sidebar">
-    <h2>💜 Aaru Bot</h2>
+    <h2>💜 <span>Aaru</span> Bot</h2>
     <button class="new-chat" onclick="newChat()">+ New Chat</button>
     <div id="chatList"></div>
   </div>
@@ -261,7 +285,14 @@ const predefinedReplies = [
   { keywords: ["kya kar rahi hai", "kya kar rahe ho", "kya kar rahe hain"], reply: "kuch nhi bus iss duniya me survive" },
   { keywords: ["who are you", "what is your name", "what are you","kon ho tum","naam"], reply: "I'm Aaru, your smart assistant 🤖" },
   { keywords: ["creator", "developer", "owner", "founder", "builder", "create"], reply: "I was created by Vaibhav 😎🔥" },
-  { keywords: ["project"], reply: "to make something that have zero nakhre and always available 🔥" }
+  { keywords: ["project"], reply: "to make something that have zero nakhre and always available 🔥" },
+  // NEW PREDEFINED DATA
+  { keywords: ["time", "what time", "current time"], reply: `Current time is ${new Date().toLocaleTimeString()}` },
+  { keywords: ["date", "today date"], reply: `Today is ${new Date().toLocaleDateString()}` },
+  { keywords: ["joke", "funny"], reply: "Why don’t scientists trust atoms? Because they make up everything! 😜" },
+  { keywords: ["weather"], reply: "I'm not connected to live weather yet, but make sure to enjoy sunny or rainy days 🌤️" },
+  { keywords: ["help", "support"], reply: "You can ask me anything about me or my projects 💜" },
+  { keywords: ["bye", "see you"], reply: "Bye 💜 Take care! See you soon!" }
 ];
 
 const API_URL = "https://aaru-bot-main.onrender.com/chat";
