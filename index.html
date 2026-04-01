@@ -1,50 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Aaru Bot</title>
+<title>Aaru Bot 💜</title>
 
 <style>
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
   display: flex;
   height: 100vh;
-  font-family: Arial;
-  background: #f5f3ff;
+  background: linear-gradient(135deg, #f5f3ff, #ede9fe, #e0c3fc);
 }
 
 /* Sidebar */
 .sidebar {
   width: 260px;
-  background: #1e1b2e;
+  background: rgba(30, 27, 46, 0.95);
+  backdrop-filter: blur(10px);
   color: white;
-  padding: 15px;
+  padding: 20px;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.2);
 }
 
 .sidebar h2 {
   color: #d8b4fe;
+  margin-bottom: 20px;
+}
+
+.new-chat {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #b57edc, #9333ea);
+  color: white;
+  cursor: pointer;
+  margin-bottom: 15px;
 }
 
 .chat-item {
   padding: 10px;
-  margin-top: 10px;
-  background: #2a2545;
-  border-radius: 8px;
+  margin-top: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 .chat-item:hover {
-  background: #3b2f6b;
-}
-
-.new-chat {
-  margin-top: 15px;
-  padding: 10px;
-  background: #b57edc;
-  border: none;
-  color: white;
-  border-radius: 8px;
-  width: 100%;
-  cursor: pointer;
+  background: #6d28d9;
+  transform: scale(1.03);
 }
 
 /* Main */
@@ -54,14 +64,17 @@ body {
   flex-direction: column;
 }
 
+/* Header */
 .header {
   padding: 15px;
-  background: white;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid #ddd;
   color: #6b21a8;
   font-weight: bold;
 }
 
+/* Chat Area */
 .chat {
   flex: 1;
   padding: 20px;
@@ -70,71 +83,111 @@ body {
 
 /* Messages */
 .message {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
-.user { text-align: right; }
+.user {
+  text-align: right;
+}
 
 .bubble {
   display: inline-block;
-  padding: 10px;
-  border-radius: 12px;
-  max-width: 60%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  max-width: 65%;
+  transition: 0.2s;
 }
 
+.bubble:hover {
+  transform: scale(1.03);
+}
+
+/* User */
 .user .bubble {
-  background: #b57edc;
+  background: linear-gradient(135deg, #b57edc, #9333ea);
   color: white;
 }
 
+/* Bot */
 .bot .bubble {
-  background: #ede9fe;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 /* Input */
 .input-area {
   display: flex;
-  padding: 10px;
-  background: white;
+  padding: 12px;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
 }
 
 input {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+input:focus {
+  border-color: #9333ea;
+  box-shadow: 0 0 5px rgba(147,51,234,0.4);
 }
 
 button.send {
-  background: #b57edc;
-  color: white;
+  margin-left: 10px;
+  padding: 12px 16px;
   border: none;
-  padding: 10px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #b57edc, #9333ea);
+  color: white;
+  cursor: pointer;
 }
+
+button.send:hover {
+  opacity: 0.9;
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
   <h2>💜 Aaru Bot</h2>
   <button class="new-chat" onclick="newChat()">+ New Chat</button>
   <div id="chatList"></div>
 </div>
 
+<!-- Main -->
 <div class="main">
-  <div class="header">Aaru Bot</div>
+
+  <div class="header">Aaru Bot - Smart Assistant</div>
 
   <div class="chat" id="chat"></div>
 
   <div class="input-area">
-    <input id="msg" placeholder="Type...">
+    <input id="msg" placeholder="Message Aaru Bot..." />
     <button class="send" onclick="send()">Send</button>
   </div>
+
 </div>
 
 <script>
 
+// Chats
 let chats = [];
 let currentChat = 0;
+
+// Predefined replies
+const predefinedReplies = [
+  { keywords: ["hello","hi","hey"], reply: "Heyy 💜 I'm Aaru Bot!" },
+  { keywords: ["who are you"], reply: "I'm Aaru Bot, your smart assistant 🤖" },
+  { keywords: ["creator"], reply: "I was created by Vaibhav 😎🔥" },
+  { keywords: ["project"], reply: "You're building something awesome 🔥" }
+];
 
 // Create first chat
 newChat();
@@ -183,38 +236,47 @@ function add(text, type) {
 
   msg.appendChild(bubble);
   chat.appendChild(msg);
+
+  chat.scrollTop = chat.scrollHeight;
 }
-const predefinedReplies = [
-  {
-    keywords: ["hello", "hi", "hey"],
-    reply: "Heyy 💜 I'm Aaru Bot!"
-  },
-  {
-    keywords: ["who are you"],
-    reply: "I'm Aaru Bot, your smart assistant 🤖"
-  },
-  {
-    keywords: ["your creator"],
-    reply: "I was created by Vaibhav 😎🔥"
-  },
-  {
-    keywords: ["project"],
-    reply: "You're building something really impressive 🔥"
+
+// Predefined checker
+function getPredefinedReply(input) {
+  input = input.toLowerCase();
+
+  for (let item of predefinedReplies) {
+    for (let word of item.keywords) {
+      if (input.includes(word)) {
+        return item.reply;
+      }
+    }
   }
-];
+  return null;
+}
+
+// Send message
 async function send() {
   const input = document.getElementById("msg");
   const text = input.value.trim();
   if (!text) return;
 
   add(text, "user");
-
   chats[currentChat].push({ role: "user", text });
 
   input.value = "";
 
   add("Typing...", "bot");
 
+  // Predefined
+  const predefined = getPredefinedReply(text);
+  if (predefined) {
+    document.querySelector(".bot:last-child").remove();
+    add(predefined, "bot");
+    chats[currentChat].push({ role: "model", text: predefined });
+    return;
+  }
+
+  // API call
   const res = await fetch("http://localhost:3000/chat", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
@@ -231,6 +293,11 @@ async function send() {
 
   chats[currentChat].push({ role: "model", text: data.reply });
 }
+
+// Enter key support
+document.getElementById("msg").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") send();
+});
 
 </script>
 
