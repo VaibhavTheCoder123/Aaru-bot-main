@@ -6,19 +6,48 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial;
   display: flex;
   height: 100vh;
+  font-family: Arial;
   background: #f5f3ff;
 }
 
+/* Sidebar */
 .sidebar {
-  width: 250px;
+  width: 260px;
   background: #1e1b2e;
   color: white;
-  padding: 20px;
+  padding: 15px;
 }
 
+.sidebar h2 {
+  color: #d8b4fe;
+}
+
+.chat-item {
+  padding: 10px;
+  margin-top: 10px;
+  background: #2a2545;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.chat-item:hover {
+  background: #3b2f6b;
+}
+
+.new-chat {
+  margin-top: 15px;
+  padding: 10px;
+  background: #b57edc;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Main */
 .main {
   flex: 1;
   display: flex;
@@ -39,17 +68,16 @@ body {
   overflow-y: auto;
 }
 
+/* Messages */
 .message {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-.user {
-  text-align: right;
-}
+.user { text-align: right; }
 
 .bubble {
   display: inline-block;
-  padding: 10px 14px;
+  padding: 10px;
   border-radius: 12px;
   max-width: 60%;
 }
@@ -63,71 +91,91 @@ body {
   background: #ede9fe;
 }
 
+/* Input */
 .input-area {
   display: flex;
   padding: 10px;
   background: white;
-  border-top: 1px solid #ddd;
 }
 
 input {
   flex: 1;
   padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
 }
 
-button {
-  margin-left: 10px;
-  padding: 10px 15px;
+button.send {
   background: #b57edc;
   color: white;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #9333ea;
+  padding: 10px;
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="sidebar">
   <h2>💜 Aaru Bot</h2>
-  <button onclick="clearChat()">New Chat</button>
+  <button class="new-chat" onclick="newChat()">+ New Chat</button>
+  <div id="chatList"></div>
 </div>
 
 <div class="main">
-  <div class="header">Aaru Bot - Smart Assistant</div>
+  <div class="header">Aaru Bot</div>
 
   <div class="chat" id="chat"></div>
 
   <div class="input-area">
-    <input id="msg" placeholder="Type a message...">
-    <button onclick="send()">Send</button>
+    <input id="msg" placeholder="Type...">
+    <button class="send" onclick="send()">Send</button>
   </div>
 </div>
 
 <script>
 
-// 🧠 CHAT MEMORY
-let chatHistory = [];
+let chats = [];
+let currentChat = 0;
 
-// ENTER KEY SUPPORT
-document.getElementById("msg").addEventListener("keydown", e => {
-  if (e.key === "Enter") send();
-});
+// Create first chat
+newChat();
 
-// ADD MESSAGE
+function newChat() {
+  chats.push([]);
+  currentChat = chats.length - 1;
+  renderChats();
+  renderMessages();
+}
+
+function renderChats() {
+  const list = document.getElementById("chatList");
+  list.innerHTML = "";
+
+  chats.forEach((c, i) => {
+    const div = document.createElement("div");
+    div.className = "chat-item";
+    div.innerText = "Chat " + (i + 1);
+    div.onclick = () => {
+      currentChat = i;
+      renderMessages();
+    };
+    list.appendChild(div);
+  });
+}
+
+function renderMessages() {
+  const chatDiv = document.getElementById("chat");
+  chatDiv.innerHTML = "";
+
+  chats[currentChat].forEach(m => {
+    add(m.text, m.role);
+  });
+}
+
 function add(text, type) {
   const chat = document.getElementById("chat");
 
   const msg = document.createElement("div");
-  msg.className = "message " + type;
+  msg.className = "message " + (type === "user" ? "user" : "bot");
 
   const bubble = document.createElement("div");
   bubble.className = "bubble";
@@ -135,62 +183,36 @@ function add(text, type) {
 
   msg.appendChild(bubble);
   chat.appendChild(msg);
-
-  chat.scrollTop = chat.scrollHeight;
 }
 
-// SEND MESSAGE
 async function send() {
   const input = document.getElementById("msg");
   const text = input.value.trim();
   if (!text) return;
 
   add(text, "user");
+
+  chats[currentChat].push({ role: "user", text });
+
   input.value = "";
 
-  // Save user message
-  chatHistory.push({
-    role: "user",
-    text: text
-  });
-
-  // Typing indicator
   add("Typing...", "bot");
 
-  try {
-    const res = await fetch("http://localhost:3000/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        messages: chatHistory
-      })
-    });
+  const res = await fetch("http://localhost:3000/chat", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      messages: chats[currentChat]
+    })
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    // Remove typing
-    document.querySelector(".bot:last-child").remove();
+  document.querySelector(".bot:last-child").remove();
 
-    add(data.reply, "bot");
+  add(data.reply, "bot");
 
-    // Save bot reply
-    chatHistory.push({
-      role: "model",
-      text: data.reply
-    });
-
-  } catch (error) {
-    document.querySelector(".bot:last-child").remove();
-    add("Server error 😢", "bot");
-  }
-}
-
-// CLEAR CHAT
-function clearChat() {
-  chatHistory = [];
-  document.getElementById("chat").innerHTML = "";
+  chats[currentChat].push({ role: "model", text: data.reply });
 }
 
 </script>
