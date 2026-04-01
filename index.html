@@ -176,7 +176,6 @@ button.send:hover {
 </div>
 
 <script>
-
 // Chats
 let chats = [];
 let currentChat = 0;
@@ -194,6 +193,9 @@ const predefinedReplies = [
   { keywords: ["creator", "developer", "owner", "founder", "builder", "create"], reply: "I was created by Vaibhav 😎🔥, i.g GUGU" },
   { keywords: ["project"], reply: "to make something that have zero nakhre and always available 🔥" }
 ];
+
+// Backend API URL
+const API_URL = "https://aaru-bot-main.onrender.com/chat";
 
 // Create first chat
 newChat();
@@ -268,7 +270,6 @@ async function send() {
 
   add(text, "user");
   chats[currentChat].push({ role: "user", text });
-
   input.value = "";
 
   add("Typing...", "bot");
@@ -282,22 +283,28 @@ async function send() {
     return;
   }
 
-  // API call
-  const res = await fetch("https://aaru-bot-main.onrender.com", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      messages: chats[currentChat]
-    })
-  });
+  try {
+    // API call
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: chats[currentChat] })
+    });
 
-  const data = await res.json();
+    if (!res.ok) throw new Error("Backend error");
 
-  document.querySelector(".bot:last-child").remove();
+    const data = await res.json();
 
-  add(data.reply, "bot");
+    document.querySelector(".bot:last-child").remove();
 
-  chats[currentChat].push({ role: "model", text: data.reply });
+    add(data.reply || "Oops! No response", "bot");
+    chats[currentChat].push({ role: "model", text: data.reply || "Oops! No response" });
+
+  } catch (err) {
+    document.querySelector(".bot:last-child").remove();
+    add("⚠️ Backend not reachable", "bot");
+    console.error(err);
+  }
 }
 
 // Enter key support
