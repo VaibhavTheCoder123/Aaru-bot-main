@@ -6,259 +6,75 @@
 <title>Aaru Bot 💜</title>
 
 <style>
-/* Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-body {
-  height: 100vh;
-  background: linear-gradient(135deg, #f5f3ff, #ede9fe, #e0c3fc);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+/* Base */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+body { background: #1e1b2e; display:flex; justify-content:center; align-items:center; height:100vh; color:white; }
 
 /* Container */
-.container {
-  width: 100%;
-  max-width: 1000px;
-  height: 90vh;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  display: flex;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  overflow: hidden;
-}
+.container { width:100%; max-width:1000px; height:90vh; display:flex; border-radius:20px; overflow:hidden; box-shadow:0 15px 30px rgba(0,0,0,0.5); }
 
 /* Sidebar */
-.sidebar {
-  width: 280px;
-  background: linear-gradient(135deg, #9333ea, #6b21a8);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  transition: all 0.3s;
-}
+.sidebar { width:280px; background: #2c2540; display:flex; flex-direction:column; padding:20px; transition:0.3s; }
+.sidebar h2 { text-align:center; margin-bottom:20px; font-size:1.6rem; color:#eee; }
+.sidebar h2 span { color:#c8a2ff; } /* lavender highlight for Aaru */
+.new-chat { padding:12px; border-radius:12px; border:none; background: linear-gradient(135deg,#9333ea,#b57edc); color:white; font-weight:bold; cursor:pointer; margin-bottom:15px; transition:all 0.2s; }
+.new-chat:hover { transform:scale(1.05); opacity:0.9; }
+#chatList { flex:1; overflow-y:auto; }
 
-.sidebar h2 {
-  color: #ede9fe;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-}
+/* Chat items */
+.chat-item { padding:10px; margin-bottom:8px; background:rgba(255,255,255,0.05); border-radius:10px; cursor:pointer; transition:0.2s; }
+.chat-item:hover { background: rgba(147,51,234,0.3); transform:scale(1.02); }
 
-.sidebar h2 span {
-  color: #c8a2ff; /* lavender highlight for Aaru */
-}
-
-.new-chat {
-  padding: 12px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #b57edc, #9333ea);
-  border: none;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 15px;
-  transition: all 0.2s;
-}
-
-.new-chat:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
-}
-
-#chatList {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.chat-item {
-  padding: 10px;
-  margin-bottom: 8px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.chat-item:hover {
-  background: rgba(255,255,255,0.3);
-  transform: scale(1.02);
-}
-
-/* Main Chat Area */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
+/* Main chat area */
+.main { flex:1; display:flex; flex-direction:column; background:#1e1b2e; }
 
 /* Header */
-.header {
-  padding: 16px;
-  font-weight: bold;
-  font-size: 1.3rem;
-  background: linear-gradient(135deg, #b57edc, #9333ea);
-  color: #fff;
-  text-align: center;
-}
+.header { padding:16px; font-weight:bold; font-size:1.3rem; background:linear-gradient(135deg,#9333ea,#b57edc); text-align:center; color:white; }
 
 /* Chat messages */
-.chat {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  scroll-behavior: smooth;
-  background: #f9f7fe;
-}
+.chat { flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; scroll-behavior:smooth; background:#1a1727; }
 
-/* Messages */
-.message {
-  display: flex;
-  flex-direction: column;
-  max-width: 70%;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeSlide 0.4s forwards;
-}
+/* Message animation */
+.message { display:flex; flex-direction:column; max-width:70%; opacity:0; transform:translateY(20px); animation:fadeSlide 0.4s forwards; }
+@keyframes fadeSlide { to { opacity:1; transform:translateY(0); } }
 
-@keyframes fadeSlide {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+.user { align-self:flex-end; text-align:right; }
+.bot { align-self:flex-start; text-align:left; }
 
-.user {
-  align-self: flex-end;
-  text-align: right;
-}
-
-.bot {
-  align-self: flex-start;
-  text-align: left;
-}
-
-.bubble {
-  padding: 14px 20px;
-  border-radius: 25px;
-  font-size: 0.95rem;
-  word-wrap: break-word;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  transition: transform 0.2s, background 0.3s;
-}
-
-.user .bubble {
-  background: linear-gradient(135deg, #c084fc, #9333ea);
-  color: white;
-  border-bottom-right-radius: 5px;
-}
-
-.user .bubble:hover {
-  transform: scale(1.03);
-}
-
-.bot .bubble {
-  background: #fff;
-  color: #333;
-  border-bottom-left-radius: 5px;
-}
-
-.bot .bubble:hover {
-  transform: scale(1.02);
-}
+/* Bubble styles */
+.bubble { padding:14px 20px; border-radius:25px; font-size:0.95rem; word-wrap:break-word; box-shadow:0 4px 12px rgba(0,0,0,0.3); transition: transform 0.2s; }
+.user .bubble { background: linear-gradient(135deg,#6b21a8,#c084fc); color:white; border-bottom-right-radius:5px; }
+.user .bubble:hover { transform:scale(1.03); }
+.bot .bubble { background:#2c2540; color:#eee; border-bottom-left-radius:5px; }
+.bot .bubble:hover { transform:scale(1.02); }
 
 /* Input area */
-.input-area {
-  display: flex;
-  padding: 12px 16px;
-  background: #fff;
-  border-top: 1px solid #ddd;
-  gap: 10px;
-  transition: all 0.2s;
-}
-
-input {
-  flex: 1;
-  padding: 12px 16px;
-  border-radius: 25px;
-  border: 1px solid #ccc;
-  outline: none;
-  font-size: 1rem;
-  transition: all 0.2s;
-}
-
-input:focus {
-  border-color: #9333ea;
-  box-shadow: 0 0 5px rgba(147,51,234,0.4);
-}
-
-button.send {
-  padding: 12px 18px;
-  border-radius: 25px;
-  border: none;
-  background: linear-gradient(135deg, #c084fc, #9333ea);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-button.send:hover {
-  opacity: 0.9;
-  transform: scale(1.05);
-}
+.input-area { display:flex; padding:12px 16px; gap:10px; border-top:1px solid rgba(255,255,255,0.2); }
+input { flex:1; padding:12px 16px; border-radius:25px; border:1px solid #555; outline:none; font-size:1rem; background:#2c2540; color:white; transition:all 0.2s; }
+input:focus { border-color:#c8a2ff; box-shadow:0 0 5px rgba(200,162,255,0.5); }
+button.send { padding:12px 18px; border-radius:25px; border:none; background:linear-gradient(135deg,#9333ea,#b57edc); color:white; font-weight:bold; cursor:pointer; transition:all 0.2s; }
+button.send:hover { opacity:0.9; transform:scale(1.05); }
 
 /* Scrollbar */
-.chat::-webkit-scrollbar, #chatList::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chat::-webkit-scrollbar-thumb, #chatList::-webkit-scrollbar-thumb {
-  background: rgba(147,51,234,0.4);
-  border-radius: 3px;
-}
+.chat::-webkit-scrollbar, #chatList::-webkit-scrollbar { width:6px; }
+.chat::-webkit-scrollbar-thumb, #chatList::-webkit-scrollbar-thumb { background: rgba(147,51,234,0.4); border-radius:3px; }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    height: 95vh;
-    width: 95%;
-  }
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 10px 16px;
-  }
-  #chatList {
-    display: none;
-  }
+@media (max-width:768px) {
+  .container { flex-direction:column; height:95vh; width:95%; }
+  .sidebar { width:100%; flex-direction:row; justify-content:space-between; padding:10px 16px; }
+  #chatList { display:none; }
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- Sidebar -->
   <div class="sidebar">
     <h2>💜 <span>Aaru</span> Bot</h2>
     <button class="new-chat" onclick="newChat()">+ New Chat</button>
     <div id="chatList"></div>
   </div>
-
-  <!-- Main Chat Area -->
   <div class="main">
     <div class="header">Aaru Bot - Smart Assistant</div>
     <div class="chat" id="chat"></div>
@@ -274,117 +90,63 @@ button.send:hover {
 let chats = [];
 let currentChat = 0;
 
-// Predefined replies
+// Predefined replies (added more)
 const predefinedReplies = [
-  { keywords: ["hello", "hi", "hey"], reply: "Heyy 💜 I'm Aaru!, Smarter aaru with zero nakhre" },
-  { keywords: ["kaise hai","how are you"], reply: "badhiya and sexy as always💜 tu bta kaisa hai" },
-  { keywords: ["thik", "badhiya", "mast"], reply: "gr8 dude.........tu bta!!!" },
-  { keywords: ["colour"], reply: "Lavender paglu" },
-  { keywords: ["love"], reply: "Drawing, yepping, mandalas, nature, space, galaxy, ocean, animals" },
-  { keywords: ["instagram"], reply: "virtuoso_infinity" },
-  { keywords: ["kya kar rahi hai", "kya kar rahe ho", "kya kar rahe hain"], reply: "kuch nhi bus iss duniya me survive" },
-  { keywords: ["who are you", "what is your name", "what are you","kon ho tum","naam"], reply: "I'm Aaru, your smart assistant 🤖" },
-  { keywords: ["creator", "developer", "owner", "founder", "builder", "create"], reply: "I was created by Vaibhav 😎🔥" },
-  { keywords: ["project"], reply: "to make something that have zero nakhre and always available 🔥" },
-  // NEW PREDEFINED DATA
-  { keywords: ["time", "what time", "current time"], reply: `Current time is ${new Date().toLocaleTimeString()}` },
-  { keywords: ["date", "today date"], reply: `Today is ${new Date().toLocaleDateString()}` },
-  { keywords: ["joke", "funny"], reply: "Why don’t scientists trust atoms? Because they make up everything! 😜" },
-  { keywords: ["weather"], reply: "I'm not connected to live weather yet, but make sure to enjoy sunny or rainy days 🌤️" },
-  { keywords: ["help", "support"], reply: "You can ask me anything about me or my projects 💜" },
-  { keywords: ["bye", "see you"], reply: "Bye 💜 Take care! See you soon!" }
+  { keywords:["hello","hi","hey"], reply:"Heyy 💜 I'm Aaru! Smarter aaru with zero nakhre" },
+  { keywords:["kaise hai","how are you"], reply:"badhiya and glowing 💜 tu bta kaisa hai?" },
+  { keywords:["thik","badhiya","mast"], reply:"gr8 dude.........tu bta!!!" },
+  { keywords:["colour"], reply:"Lavender paglu" },
+  { keywords:["love"], reply:"Drawing, yepping, mandalas, nature, space, galaxy, ocean, animals" },
+  { keywords:["instagram"], reply:"virtuoso_infinity" },
+  { keywords:["kya kar rahi hai","kya kar rahe ho"], reply:"kuch nhi bus iss duniya me survive" },
+  { keywords:["who are you","what is your name"], reply:"I'm Aaru, your smart assistant 🤖" },
+  { keywords:["creator","developer","owner","founder","builder"], reply:"I was created by Vaibhav 😎🔥" },
+  { keywords:["project"], reply:"To make something that has zero nakhre and always available 🔥" },
+  // New predefined
+  { keywords:["time","current time"], reply:`Current time is ${new Date().toLocaleTimeString()}` },
+  { keywords:["date","today date"], reply:`Today is ${new Date().toLocaleDateString()}` },
+  { keywords:["joke","funny"], reply:"Why don’t scientists trust atoms? Because they make up everything! 😜" },
+  { keywords:["weather"], reply:"I'm not connected to live weather yet, enjoy your day ☀️🌧️" },
+  { keywords:["help","support"], reply:"You can ask me anything about me or my projects 💜" },
+  { keywords:["bye","see you"], reply:"Bye 💜 Take care! See you soon!" },
+  { keywords:["favourite","hobby"], reply:"I love painting, exploring galaxies, and making people smile 💜" },
+  { keywords:["music","song"], reply:"I enjoy relaxing ambient and lo-fi beats while working" },
+  { keywords:["motivation","quote"], reply:"Believe in yourself 💜, small steps lead to big dreams!" },
+  { keywords:["fun fact","random"], reply:"Did you know? Octopuses have three hearts! 🐙" }
 ];
 
 const API_URL = "https://aaru-bot-main.onrender.com/chat";
 
 newChat();
-
-function newChat() {
-  chats.push([]);
-  currentChat = chats.length - 1;
-  renderChats();
-  renderMessages();
-}
-
-function renderChats() {
-  const list = document.getElementById("chatList");
-  list.innerHTML = "";
-  chats.forEach((c, i) => {
-    const div = document.createElement("div");
-    div.className = "chat-item";
-    div.innerText = "Chat " + (i + 1);
-    div.onclick = () => { currentChat = i; renderMessages(); };
-    list.appendChild(div);
-  });
-}
-
-function renderMessages() {
-  const chatDiv = document.getElementById("chat");
-  chatDiv.innerHTML = "";
-  chats[currentChat].forEach(m => { add(m.text, m.role); });
-}
-
-function add(text, type) {
-  const chat = document.getElementById("chat");
-  const msg = document.createElement("div");
-  msg.className = "message " + (type === "user" ? "user" : "bot");
-  const bubble = document.createElement("div");
-  bubble.className = "bubble";
-  bubble.innerText = text;
-  msg.appendChild(bubble);
-  chat.appendChild(msg);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function getPredefinedReply(input) {
-  input = input.toLowerCase();
-  for (let item of predefinedReplies) {
-    for (let word of item.keywords) {
-      if (input.includes(word)) return item.reply;
-    }
-  }
-  return null;
-}
+function newChat() { chats.push([]); currentChat=chats.length-1; renderChats(); renderMessages(); }
+function renderChats() { const list = document.getElementById("chatList"); list.innerHTML=""; chats.forEach((c,i)=>{ const div=document.createElement("div"); div.className="chat-item"; div.innerText="Chat "+(i+1); div.onclick=()=>{currentChat=i; renderMessages();}; list.appendChild(div); }); }
+function renderMessages() { const chatDiv=document.getElementById("chat"); chatDiv.innerHTML=""; chats[currentChat].forEach(m=>add(m.text,m.role)); }
+function add(text,type){ const chat=document.getElementById("chat"); const msg=document.createElement("div"); msg.className="message "+(type==="user"?"user":"bot"); const bubble=document.createElement("div"); bubble.className="bubble"; bubble.innerText=text; msg.appendChild(bubble); chat.appendChild(msg); chat.scrollTop=chat.scrollHeight; }
+function getPredefinedReply(input){ input=input.toLowerCase(); for(let item of predefinedReplies){ for(let word of item.keywords){ if(input.includes(word)) return item.reply; } } return null; }
 
 async function send() {
-  const input = document.getElementById("msg");
-  const text = input.value.trim();
-  if (!text) return;
-  add(text, "user");
-  chats[currentChat].push({ role: "user", text });
-  input.value = "";
-  add("Typing...", "bot");
+  const input=document.getElementById("msg");
+  const text=input.value.trim();
+  if(!text) return;
+  add(text,"user");
+  chats[currentChat].push({role:"user",text});
+  input.value="";
+  add("Typing...","bot");
 
-  const predefined = getPredefinedReply(text);
-  if (predefined) {
-    document.querySelector(".bot:last-child").remove();
-    add(predefined, "bot");
-    chats[currentChat].push({ role: "model", text: predefined });
-    return;
-  }
+  const predefined=getPredefinedReply(text);
+  if(predefined){ document.querySelector(".bot:last-child").remove(); add(predefined,"bot"); chats[currentChat].push({role:"model",text:predefined}); return; }
 
   try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: chats[currentChat] })
-    });
-    if (!res.ok) throw new Error("Backend error");
-    const data = await res.json();
+    const res=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:chats[currentChat]})});
+    if(!res.ok) throw new Error("Backend error");
+    const data=await res.json();
     document.querySelector(".bot:last-child").remove();
-    add(data.reply || "Oops! No response", "bot");
-    chats[currentChat].push({ role: "model", text: data.reply || "Oops! No response" });
-  } catch (err) {
-    document.querySelector(".bot:last-child").remove();
-    add("⚠️ Backend not reachable", "bot");
-    console.error(err);
-  }
+    add(data.reply||"Oops! No response","bot");
+    chats[currentChat].push({role:"model",text:data.reply||"Oops! No response"});
+  } catch(err) { document.querySelector(".bot:last-child").remove(); add("⚠️ Backend not reachable","bot"); console.error(err); }
 }
+document.getElementById("msg").addEventListener("keydown",function(e){ if(e.key==="Enter") send(); });
 
-document.getElementById("msg").addEventListener("keydown", function(e) {
-  if (e.key === "Enter") send();
-});
 </script>
-
 </body>
 </html>
