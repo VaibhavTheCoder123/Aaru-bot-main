@@ -15,131 +15,160 @@
 }
 
 body {
-  display: flex;
   height: 100vh;
   background: linear-gradient(135deg, #f5f3ff, #ede9fe, #e0c3fc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1000px;
+  height: 90vh;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  display: flex;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  overflow: hidden;
 }
 
 /* Sidebar */
 .sidebar {
-  width: 260px;
-  background: rgba(30, 27, 46, 0.95);
-  backdrop-filter: blur(10px);
+  width: 280px;
+  background: linear-gradient(135deg, #9333ea, #6b21a8);
   color: white;
-  padding: 20px;
-  box-shadow: 4px 0 20px rgba(0,0,0,0.2);
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  padding: 20px;
 }
 
 .sidebar h2 {
-  color: #d8b4fe;
+  color: #fff;
   margin-bottom: 20px;
-  font-size: 1.5rem;
+  text-align: center;
 }
 
 .new-chat {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
+  padding: 12px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #b57edc, #9333ea);
+  border: none;
   color: white;
+  font-weight: bold;
   cursor: pointer;
   margin-bottom: 15px;
-  font-size: 1rem;
+  transition: 0.2s;
+}
+
+.new-chat:hover {
+  transform: scale(1.03);
+}
+
+#chatList {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .chat-item {
   padding: 10px;
-  margin-top: 8px;
-  background: rgba(255,255,255,0.05);
+  margin-bottom: 8px;
+  background: rgba(255,255,255,0.1);
   border-radius: 10px;
   cursor: pointer;
   transition: 0.2s;
-  font-size: 0.95rem;
 }
 
 .chat-item:hover {
-  background: #6d28d9;
-  transform: scale(1.03);
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.02);
 }
 
-/* Main area */
+/* Main Chat Area */
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
 }
 
 /* Header */
 .header {
-  padding: 15px;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid #ddd;
-  color: #6b21a8;
+  padding: 16px;
   font-weight: bold;
   font-size: 1.2rem;
+  background: linear-gradient(135deg, #b57edc, #9333ea);
+  color: white;
+  text-align: center;
 }
 
-/* Chat area */
+/* Chat messages */
 .chat {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   scroll-behavior: smooth;
+  background: #f9f7fe;
 }
 
 /* Messages */
 .message {
-  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
 }
 
 .user {
+  align-self: flex-end;
   text-align: right;
 }
 
-.bubble {
-  display: inline-block;
-  padding: 12px 16px;
-  border-radius: 16px;
-  max-width: 65%;
-  transition: 0.2s;
-  word-wrap: break-word;
+.bot {
+  align-self: flex-start;
+  text-align: left;
 }
 
-.bubble:hover {
-  transform: scale(1.03);
+.bubble {
+  padding: 14px 20px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  word-wrap: break-word;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
 }
 
 .user .bubble {
   background: linear-gradient(135deg, #b57edc, #9333ea);
   color: white;
+  border-bottom-right-radius: 5px;
 }
 
 .bot .bubble {
-  background: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  background: #fff;
+  color: #333;
+  border-bottom-left-radius: 5px;
 }
 
 /* Input area */
 .input-area {
   display: flex;
-  padding: 12px;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(10px);
+  padding: 12px 16px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  gap: 10px;
 }
 
 input {
   flex: 1;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 12px 16px;
+  border-radius: 25px;
   border: 1px solid #ccc;
   outline: none;
   font-size: 1rem;
+  transition: all 0.2s;
 }
 
 input:focus {
@@ -148,111 +177,71 @@ input:focus {
 }
 
 button.send {
-  margin-left: 10px;
-  padding: 12px 16px;
+  padding: 12px 18px;
+  border-radius: 25px;
   border: none;
-  border-radius: 12px;
   background: linear-gradient(135deg, #b57edc, #9333ea);
   color: white;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 1rem;
+  transition: all 0.2s;
 }
 
 button.send:hover {
   opacity: 0.9;
+  transform: scale(1.05);
 }
 
-/* Scrollbar styling */
-.chat::-webkit-scrollbar {
-  width: 8px;
+/* Scrollbar */
+.chat::-webkit-scrollbar, #chatList::-webkit-scrollbar {
+  width: 6px;
 }
 
-.chat::-webkit-scrollbar-thumb {
+.chat::-webkit-scrollbar-thumb, #chatList::-webkit-scrollbar-thumb {
   background: rgba(147,51,234,0.4);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
-/* Responsive styles */
-@media (max-width: 1024px) { /* tablets */
-  .sidebar {
-    width: 200px;
-    padding: 15px;
-  }
-  .chat-item {
-    font-size: 0.9rem;
-  }
-  .header {
-    font-size: 1.1rem;
-  }
-}
-
-@media (max-width: 768px) { /* small tablets / landscape phones */
-  body {
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
     flex-direction: column;
+    height: 95vh;
+    width: 95%;
   }
   .sidebar {
     width: 100%;
     flex-direction: row;
-    overflow-x: auto;
-    padding: 10px;
+    justify-content: space-between;
+    padding: 10px 16px;
   }
-  .sidebar h2 {
-    font-size: 1.2rem;
-    margin-right: 15px;
-  }
-  .new-chat {
-    margin-right: 10px;
-    margin-bottom: 0;
-    font-size: 0.9rem;
-  }
-  .chat-item {
-    display: inline-block;
-    margin: 0 8px;
+  #chatList {
+    display: none;
   }
   .main {
     flex: 1;
-    height: calc(100vh - 60px);
-  }
-  .header {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) { /* mobile */
-  .input-area {
-    flex-direction: column;
-  }
-  input {
-    margin-bottom: 10px;
-    font-size: 0.95rem;
-  }
-  button.send {
-    margin-left: 0;
-    font-size: 0.95rem;
-  }
-  .bubble {
-    max-width: 80%;
-    font-size: 0.9rem;
   }
 }
 </style>
 </head>
-
 <body>
-<!-- Sidebar -->
-<div class="sidebar">
-  <h2>💜 Aaru Bot</h2>
-  <button class="new-chat" onclick="newChat()">+ New Chat</button>
-  <div id="chatList"></div>
-</div>
 
-<!-- Main -->
-<div class="main">
-  <div class="header">Aaru Bot - Smart Assistant</div>
-  <div class="chat" id="chat"></div>
-  <div class="input-area">
-    <input id="msg" placeholder="Message Aaru Bot..." />
-    <button class="send" onclick="send()">Send</button>
+<div class="container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>💜 Aaru Bot</h2>
+    <button class="new-chat" onclick="newChat()">+ New Chat</button>
+    <div id="chatList"></div>
+  </div>
+
+  <!-- Main Chat Area -->
+  <div class="main">
+    <div class="header">Aaru Bot - Smart Assistant</div>
+    <div class="chat" id="chat"></div>
+    <div class="input-area">
+      <input id="msg" placeholder="Message Aaru Bot..." />
+      <button class="send" onclick="send()">Send</button>
+    </div>
   </div>
 </div>
 
@@ -270,15 +259,13 @@ const predefinedReplies = [
   { keywords: ["love"], reply: "Drawing, yepping, mandalas, nature, space, galaxy, ocean, animals" },
   { keywords: ["instagram"], reply: "virtuoso_infinity" },
   { keywords: ["kya kar rahi hai", "kya kar rahe ho", "kya kar rahe hain"], reply: "kuch nhi bus iss duniya me survive" },
-  { keywords: ["who are you", "what is your name", "what are you","kon ho tum"], reply: "I'm Aaru, your smart assistant 🤖" },
+  { keywords: ["who are you", "what is your name", "what are you","kon ho tum","naam"], reply: "I'm Aaru, your smart assistant 🤖" },
   { keywords: ["creator", "developer", "owner", "founder", "builder", "create"], reply: "I was created by Vaibhav 😎🔥" },
   { keywords: ["project"], reply: "to make something that have zero nakhre and always available 🔥" }
 ];
 
-// Backend API URL
 const API_URL = "https://aaru-bot-main.onrender.com/chat";
 
-// Create first chat
 newChat();
 
 function newChat() {
@@ -332,11 +319,9 @@ async function send() {
   const input = document.getElementById("msg");
   const text = input.value.trim();
   if (!text) return;
-
   add(text, "user");
   chats[currentChat].push({ role: "user", text });
   input.value = "";
-
   add("Typing...", "bot");
 
   const predefined = getPredefinedReply(text);
