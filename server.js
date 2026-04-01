@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const API_KEY = "AIzaSyBj3b3wphBK2SuESHlaoD58hZYTznJC9wk";
+const API_KEY = "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";
 
 // Test route
 app.get("/", (req, res) => {
@@ -22,38 +22,29 @@ app.post("/chat", async (req, res) => {
     console.log("Received:", messages);
 
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+      "https://openrouter.ai/api/v1/chat/completions",
       {
-        contents: [
-          {
-            parts: [
-              {
-                text: messages.map(m => m.text).join("\n")
-              }
-            ]
-          }
-        ]
+        model: "openai/gpt-3.5-turbo", // free & stable
+        messages: messages.map(m => ({
+          role: m.role === "model" ? "assistant" : m.role,
+          content: m.text
+        }))
+      },
+      {
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`,
+          "Content-Type": "application/json"
+        }
       }
     );
 
-    const data = response.data;
-
-    console.log("Gemini Response:", data);
-
-    if (!data.candidates) {
-      return res.json({ reply: "No response 😅" });
-    }
-
-    const reply = data.candidates[0].content.parts[0].text;
+    const reply = response.data.choices[0].message.content;
 
     res.json({ reply });
 
   } catch (err) {
     console.error("FULL ERROR:", err.response?.data || err.message);
-
-    res.json({
-      reply: "Server error 😢 (check backend console)"
-    });
+    res.json({ reply: "Server error 😢" });
   }
 });
 
