@@ -184,7 +184,24 @@ function add(text, type) {
   msg.appendChild(bubble);
   chat.appendChild(msg);
 }
-
+const predefinedReplies = [
+  {
+    keywords: ["hello", "hi", "hey"],
+    reply: "Heyy 💜 I'm Aaru Bot!"
+  },
+  {
+    keywords: ["who are you"],
+    reply: "I'm Aaru Bot, your smart assistant 🤖"
+  },
+  {
+    keywords: ["your creator"],
+    reply: "I was created by Vaibhav 😎🔥"
+  },
+  {
+    keywords: ["project"],
+    reply: "You're building something really impressive 🔥"
+  }
+];
 async function send() {
   const input = document.getElementById("msg");
   const text = input.value.trim();
