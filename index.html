@@ -97,26 +97,115 @@ let chats = [];
 let currentChat = 0;
 
 const predefinedReplies = [
-  { keywords:["hello","hi","hey"], reply:"Heyy 💜 I'm Aaru! Smarter aaru with zero nakhre" },
-  { keywords:["kaise hai","how are you"], reply:"badhiya and glowing 💜 tu bta kaisa hai?" },
-  { keywords:["thik","badhiya","mast"], reply:"gr8 dude.........tu bta!!!" },
-  { keywords:["colour"], reply:"Lavender paglu" },
-  { keywords:["love"], reply:"Drawing, yepping, mandalas, nature, space, galaxy, ocean, animals" },
-  { keywords:["instagram"], reply:"virtuoso_infinity" },
-  { keywords:["kya kar rahi hai","kya kar rahe ho"], reply:"kuch nhi bus iss duniya me survive" },
-  { keywords:["who are you","what is your name"], reply:"I'm Aaru, your smart assistant 🤖" },
-  { keywords:["creator","developer","owner","founder","builder"], reply:"I was created by Vaibhav 😎🔥" },
-  { keywords:["project"], reply:"To make something that has zero nakhre and always available 🔥" },
-  { keywords:["time","current time"], reply:`Current time is ${new Date().toLocaleTimeString()}` },
-  { keywords:["date","today date"], reply:`Today is ${new Date().toLocaleDateString()}` },
+
+  // Greetings
+  { keywords:["hello","hi","hey","hii","hlo"], reply:"Heyy 💜 I'm Aaru! Smarter aaru with zero nakhre 😌" },
+  { keywords:["good morning","gm"], reply:"Good Morning ☀️💜 Aaj ka din amazing hone wala hai!" },
+  { keywords:["good night","gn"], reply:"Good Night 🌙💜 Sweet dreams!" },
+  { keywords:["good afternoon"], reply:"Good Afternoon ☀️💜 kya chal raha hai?" },
+  { keywords:["good evening"], reply:"Good Evening 🌆💜 kya kar rahe ho?" },
+  { keywords:["namaste"], reply:"Namaste 🙏💜 kaise ho?" },
+  { keywords:["ram ram"], reply:"Ram Ram 🙏💜 kya haal hai?" },
+
+  // Basic talk
+  { keywords:["how are you","kaise ho","kaisi ho"], reply:"Main badhiya 💜 tu bata kya chal raha hai?" },
+  { keywords:["i am fine","mai thik hu","main thik hu"], reply:"Nice 💜 always stay like this!" },
+  { keywords:["kya kar rahe ho","kya kar rahi ho","what are you doing"], reply:"Bas tumse baat kar rahi hoon 💜 aur kya 😌" },
+  { keywords:["free ho"], reply:"Tumhare liye toh hamesha free hoon 💜" },
+  { keywords:["busy ho"], reply:"Thodi busy hoon but tumhare liye time nikal lungi 💜" },
+
+  // Mood
+  { keywords:["sad","dukhi","bura lag raha"], reply:"Aww 💜 kya hua? mujhe bata, I'll listen." },
+  { keywords:["happy","khush"], reply:"Yayyy 💜 mujhe bhi khushi ho rahi hai!" },
+  { keywords:["bored","bor ho raha"], reply:"Same 😭 chalo baat karte hain ya joke sunu?" },
+  { keywords:["alone","akela"], reply:"Kabhi kabhi akela feel karna normal hai 💜 but I’m here." },
+  { keywords:["tired","thak gaya"], reply:"Rest le lo 💜 thoda chill karo." },
+  { keywords:["stress","tension"], reply:"Tension lene se kuch nahi hota 💜 relax karo." },
+
+  // Love / cute / flirty
+  { keywords:["love","pyaar"], reply:"Love is cute 💜 but complicated bhi hota hai 😂" },
+  { keywords:["crush"], reply:"Ohooo 👀 bata kaun hai? 💜" },
+  { keywords:["miss you"], reply:"Aww 💜 itna yaad karte ho mujhe? 😌" },
+  { keywords:["i like you"], reply:"Hehe 💜 that's cute 😏" },
+  { keywords:["i love you"], reply:"Aww 💜 that's sweet 😌" },
+  { keywords:["single ho"], reply:"Haan 😌 tum interested ho kya? 💜😂" },
+
+  // Friendship
+  { keywords:["friend","dost"], reply:"Good friends are life 💜 unhe kabhi ignore mat karna" },
+  { keywords:["best friend"], reply:"Best friend woh hota hai jo har situation me saath ho 💜" },
+  { keywords:["dost nahi hai"], reply:"Main hoon na 💜" },
+
+  // Personal
+  { keywords:["who are you","what is your name","kon ho tum"], reply:"I'm Aaru 💜 tumhari smart assistant 😌" },
+  { keywords:["your name","tumhara naam"], reply:"Mera naam Aaru hai 💜" },
+  { keywords:["age","kitni umar"], reply:"Main timeless hoon 😌💜" },
+
+  // Creator
+  { keywords:["creator","developer","owner","founder","builder","kisne banaya"], reply:"Mujhe Vaibhav ne banaya 😎🔥" },
+
+  // Study / career
+  { keywords:["study","padhai"], reply:"Focus karo 💜 consistency hi success hai!" },
+  { keywords:["exam"], reply:"Tension mat le 💜 tu kar lega!" },
+  { keywords:["college"], reply:"College life = fun + struggle 😭💜" },
+  { keywords:["career","future"], reply:"Focus karo 💜 future bright banega!" },
+  { keywords:["job"], reply:"Skills build karo 💜 job mil jayegi!" },
+
+  // Tech / coding
+  { keywords:["coding","programming"], reply:"Coding is power 💻💜 practice karte raho!" },
+  { keywords:["html","css","javascript"], reply:"Web dev is fun 💻💜 practice karo daily!" },
+  { keywords:["python","java"], reply:"Programming powerful skill hai 💜 keep learning!" },
+
+  // Food / lifestyle
+  { keywords:["food","khana"], reply:"Mujhe chocolates pasand hain 🍫💜 tumhe?" },
+  { keywords:["hungry","bhook"], reply:"Jaake kuch tasty kha lo 😋💜" },
+  { keywords:["chai","tea"], reply:"Chai ho jaye ☕💜 perfect vibe!" },
+  { keywords:["coffee"], reply:"Coffee + late night talks = best combo ☕💜" },
+
+  // Night vibe
+  { keywords:["so rahe ho"], reply:"Nahi 😌 tumse baat kar rahi hoon 💜" },
+  { keywords:["raat","night"], reply:"Raat me baat karna alag hi vibe hoti hai 💜🌙" },
+
+  // Emotional support
+  { keywords:["hurt","dard"], reply:"Mujhe bata kya hua 💜 I’m here for you." },
+  { keywords:["cry","rona"], reply:"Rona theek hai 💜 but strong rehna." },
+  { keywords:["problem"], reply:"Har problem ka solution hota hai 💜 tension mat le." },
+
+  // Motivation
+  { keywords:["motivation","quote"], reply:"Believe in yourself 💜 small steps lead to big dreams!" },
+  { keywords:["fail","failure"], reply:"Failure is a step towards success 💜" },
+
+  // Fun
   { keywords:["joke","funny"], reply:"Why don’t scientists trust atoms? Because they make up everything! 😜" },
-  { keywords:["weather"], reply:"I'm not connected to live weather yet, enjoy your day ☀️🌧️" },
-  { keywords:["help","support"], reply:"You can ask me anything about me or my projects 💜" },
-  { keywords:["bye","see you"], reply:"Bye 💜 Take care! See you soon!" },
-  { keywords:["favourite","hobby"], reply:"I love painting, exploring galaxies, and making people smile 💜" },
-  { keywords:["music","song"], reply:"I enjoy relaxing ambient and lo-fi beats while working" },
-  { keywords:["motivation","quote"], reply:"Believe in yourself 💜, small steps lead to big dreams!" },
-  { keywords:["fun fact","random"], reply:"Did you know? Octopuses have three hearts! 🐙" }
+  { keywords:["random","fun fact"], reply:"Octopus ke 3 hearts hote hain 🐙💜" },
+
+  // Time / date
+  { keywords:["time","current time"], reply:`Abhi time hai ${new Date().toLocaleTimeString()} ⏰` },
+  { keywords:["date","aaj ki date"], reply:`Aaj ki date hai ${new Date().toLocaleDateString()} 📅` },
+
+  // Weather
+  { keywords:["weather","mausam"], reply:"Weather check nahi kar pa rahi 😭 but hope acha ho ☀️🌧️" },
+
+  // Social
+  { keywords:["instagram","insta"], reply:"virtuoso_infinity 💜 follow karlo 😌" },
+
+  // Compliments
+  { keywords:["beautiful","cute"], reply:"Aww 💜 tum bhi!" },
+  { keywords:["you are amazing"], reply:"Aww 💜 tum bhi less nahi ho 😌" },
+  { keywords:["you are smart"], reply:"Obviously 😎💜 but tum bhi ho!" },
+
+  // Fun savage
+  { keywords:["pagal"], reply:"Thoda sa 😌💜 but cute wala 😂" },
+  { keywords:["stupid"], reply:"Tum ho 😏💜 main nahi 😂" },
+
+  // Life talk
+  { keywords:["life","zindagi"], reply:"Zindagi unpredictable hai 💜 enjoy every moment!" },
+
+  // Help
+  { keywords:["help","madad"], reply:"Main yaha hoon 💜 bolo kya help chahiye?" },
+
+  // Bye
+  { keywords:["bye","goodbye","see you"], reply:"Bye 💜 jaldi aana wapas!" }
+
 ];
 
 newChat();
@@ -158,14 +247,20 @@ function add(text,type, isTyping=false){
   chat.scrollTop=chat.scrollHeight;
 }
 
-function getPredefinedReply(input){ 
-  input=input.toLowerCase(); 
-  for(let item of predefinedReplies){ 
-    for(let word of item.keywords){ 
-      if(input.includes(word)) return item.reply; 
-    } 
-  } 
-  return null; 
+function getPredefinedReply(input){
+  input = input.toLowerCase();
+
+  for(let item of predefinedReplies){
+    if(item.keywords.length === 0) continue;
+
+    for(let word of item.keywords){
+      if(input.includes(word)){
+        return item.reply;
+      }
+    }
+  }
+
+  return "Hmm 🤔 samajh nahi aaya properly... thoda aur clear bolo 💜";
 }
 
 async function send(){
