@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 // const API_KEY = "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"; 
-const API_KEY = "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";
+
 
 // Test route
 app.get("/", (req, res) => {
